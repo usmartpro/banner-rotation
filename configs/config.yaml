@@ -1,0 +1,13 @@
+logger:
+  level: debug
+  file: stderr
+http:
+  host: "127.0.0.1"
+  port: "8000"
+storage:
+  type: "base"
+  dsn: "postgresql://postgres:postgres@localhost:5432/banners"
+rabbit:
+  dsn: amqp://guest:guest@localhost:5672/
+  exchange: banner-rotation
+  queue: banner-rotation
