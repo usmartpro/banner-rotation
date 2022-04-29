@@ -16,7 +16,7 @@ func TestPopularBanner(t *testing.T) {
 	expectedBannerID := 2
 	var BannerID int
 	require.NotPanics(t, func() {
-		BannerID, _ = OneHandBandit(bannerStats)
+		BannerID, _ = MultiArmedBandit(bannerStats)
 	})
 	require.Equal(t, expectedBannerID, BannerID)
 }
@@ -31,7 +31,7 @@ func TestShowEveryBanners(t *testing.T) {
 	var BannerID int
 	var banners []int
 	for i := 0; i < 20; i++ {
-		BannerID, _ = OneHandBandit(bannerStats)
+		BannerID, _ = MultiArmedBandit(bannerStats)
 		banners = append(banners, BannerID)
 	}
 

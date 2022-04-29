@@ -86,7 +86,7 @@ func (a *App) GetBanner(slotID, socialGroupID int) (int, error) {
 
 	var bannerID int
 	if err == nil {
-		if bannerID, err = OneHandBandit(banners); err != nil {
+		if bannerID, err = MultiArmedBandit(banners); err != nil {
 			return 0, err
 		}
 	} else {

@@ -6,7 +6,7 @@ import (
 	"math/big"
 )
 
-func OneHandBandit(banners []BannerStats) (int, error) {
+func MultiArmedBandit(banners []BannerStats) (int, error) {
 	var bannerID int
 	var bannerIds []int
 	var totalViewCount int64
