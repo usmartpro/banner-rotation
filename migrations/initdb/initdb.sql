@@ -1,0 +1,2 @@
+CREATE DATABASE banners;
+GRANT ALL PRIVILEGES ON DATABASE banners TO postgres;
