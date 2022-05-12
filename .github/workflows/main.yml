@@ -19,11 +19,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Install golint
-        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint
-
       - name: Linters project
-        run: make lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.45.2
 
   test:
     runs-on: ubuntu-latest
