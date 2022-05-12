@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
+        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
 
       - name: Linters project
         run: make lint
