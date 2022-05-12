@@ -2,6 +2,7 @@
 Ротация баннеров. Проектная работа
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/usmartpro/banner-rotation)](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)
+![Tests](https://github.com/usmartpro/banner-rotation/actions/workflows/main.yml/badge.svg)
 # ТЗ проекта:
 
 https://github.com/OtusGolang/final_project/blob/master/02-banners-rotation.md
@@ -33,7 +34,6 @@ make run
 make down
 ```
 
----
 # Тесты
 
 Запуск unit-тестов
@@ -46,7 +46,6 @@ make test
 make test-int
 ```
 
----
 Запуск линтера
 ```
 make lint
