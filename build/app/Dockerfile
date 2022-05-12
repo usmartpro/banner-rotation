@@ -14,7 +14,7 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 
-COPY .. ${CODE_DIR}
+COPY . ${CODE_DIR}
 
 # Собираем статический бинарник Go (без зависимостей на Си API),
 # иначе он не будет работать в alpine образе.
@@ -34,4 +34,7 @@ COPY --from=build ${BIN_FILE} ${BIN_FILE}
 
 COPY --from=build /go/bin/net-wait-go /bin/net-wait-go
 
-CMD ${BIN_FILE}
+ENV ENV_FILE /go/src/.env
+COPY --from=build ./.env ${ENV_FILE}
+
+CMD ${BIN_FILE} -env ${ENV_FILE}

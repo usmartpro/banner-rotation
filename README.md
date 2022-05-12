@@ -1,9 +1,9 @@
 # banner-rotation
 Ротация баннеров. Проектная работа
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/usmartpro/banner-rotation)](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)
+[![Go Report Card](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)
 
-ТЗ проекта:
+# ТЗ проекта:
 
 https://github.com/OtusGolang/final_project/blob/master/02-banners-rotation.md
 
@@ -14,7 +14,7 @@ https://github.com/OtusGolang/final_project/blob/master/02-banners-rotation.md
 
 Сервис осуществляет "ротацию" баннеров, показывая те, которые наиболее вероятно приведут к переходу. Для этого используется алгоритм "Многорукий бандит": https://habr.com/ru/company/surfingbird/blog/168611/
 
-#Архитектура
+# Архитектура
 Сервис состоит из REST API и базы данных
 
 # Команды
@@ -44,7 +44,7 @@ make test
 
 Запуск интеграционных тестов
 ```
-make int-test
+make test-int
 ```
 
 ---

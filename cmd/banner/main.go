@@ -9,12 +9,12 @@ import (
 	"syscall"
 	"time"
 
-	internalapp "github.com/usmartpro/banner-rotation/internal/app"
-	internalconfig "github.com/usmartpro/banner-rotation/internal/config"
-	internallogger "github.com/usmartpro/banner-rotation/internal/logger"
+	"github.com/usmartpro/banner-rotation/internal/app"
+	"github.com/usmartpro/banner-rotation/internal/config"
+	"github.com/usmartpro/banner-rotation/internal/logger"
 	"github.com/usmartpro/banner-rotation/internal/mq"
 	internalhttp "github.com/usmartpro/banner-rotation/internal/server/http"
-	internalstorage "github.com/usmartpro/banner-rotation/internal/storage"
+	"github.com/usmartpro/banner-rotation/internal/storage"
 )
 
 func main() {
@@ -23,11 +23,11 @@ func main() {
 		return
 	}
 
-	configuration, err := internalconfig.LoadConfiguration()
+	configuration, err := config.LoadConfiguration()
 	if err != nil {
 		log.Fatalf("Error read configuration: %s", err)
 	}
-	logg, err := internallogger.New(configuration.Logger)
+	logg, err := logger.New(configuration.Logger)
 	if err != nil {
 		log.Println("error create logger: " + err.Error())
 		os.Exit(1)
@@ -48,8 +48,8 @@ func main() {
 		log.Fatalf("error create rabbit client: %s", err) //nolint:gocritic
 	}
 
-	storage := internalstorage.New(ctx, configuration.Storage.Dsn).Connect(ctx)
-	bannerRotation := internalapp.New(logg, storage, rabbitClient)
+	storageConf := storage.New(ctx, configuration.Storage.Dsn).Connect(ctx)
+	bannerRotation := app.New(logg, storageConf, rabbitClient)
 
 	// HTTP
 	server := internalhttp.NewServer(logg, bannerRotation, configuration.HTTP.Host, configuration.HTTP.Port)

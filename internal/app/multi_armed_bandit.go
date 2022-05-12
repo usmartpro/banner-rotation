@@ -1,9 +1,8 @@
 package app
 
 import (
-	"crypto/rand"
 	"math"
-	"math/big"
+	"math/rand"
 )
 
 func MultiArmedBandit(banners []BannerStats) (int, error) {
@@ -37,13 +36,11 @@ func MultiArmedBandit(banners []BannerStats) (int, error) {
 		return bannerIds[0], nil
 	}
 
-	// рандомный баннер при одинаковых доходах
-	// стоило ли так делать хз, реализовал для требования:
+	// рандомный баннер при одинаковых доходах,
+	// реализовал для требования:
 	// Перебор всех: после большого количества показов, каждый баннер должен быть показан хотя один раз
-	//
-	// момент номер 2: линтер заставил использовать crypto/rand вместо math/rand, пришлось городить конвертации )
-	index, _ := rand.Int(rand.Reader, big.NewInt(int64(len(bannerIds))))
-	bannerID = bannerIds[index.Int64()]
+	index := rand.Intn(len(bannerIds)) //nolint: gosec
+	bannerID = bannerIds[index]
 
 	return bannerID, nil
 }
