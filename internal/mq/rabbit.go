@@ -17,10 +17,6 @@ type Rabbit struct {
 	logger      app.Logger
 }
 
-func (q *Rabbit) GetChannel() *amqp.Channel {
-	return q.channel
-}
-
 func NewRabbit(
 	ctx context.Context,
 	dsn string,
@@ -108,39 +104,4 @@ func (q *Rabbit) Add(n app.StatEvent) error {
 	}
 
 	return nil
-}
-
-func (q *Rabbit) GetNotificationChannel() (<-chan app.StatEvent, error) {
-	ch := make(chan app.StatEvent)
-
-	deliveries, err := q.channel.Consume(
-		q.queue,
-		q.consumerTag,
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("error consume queue (%s): %w", q.queue, err)
-	}
-
-	go func() {
-		for d := range deliveries {
-			var notification app.StatEvent
-			if err := json.Unmarshal(d.Body, &notification); err != nil {
-				q.logger.Error("error unmarshal notification: %s", err)
-				continue
-			}
-
-			ch <- notification
-
-			d.Ack(false)
-		}
-
-		close(ch)
-	}()
-
-	return ch, nil
 }

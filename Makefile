@@ -10,16 +10,7 @@ build:
 	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/banner
 
 run: build up
-	$(BIN)
-
-build-img:
-	docker build \
-		--build-arg=LDFLAGS="$(LDFLAGS)" \
-		-t $(DOCKER_IMG) \
-		-f build/Dockerfile .
-
-run-img: build-img
-	docker run $(DOCKER_IMG)
+	#$(BIN)
 
 version: build
 	$(BIN) version
@@ -27,11 +18,10 @@ version: build
 test:
 	go test -race ./internal/... -count 100
 
-integration-tests:
+test-int: build up
 	set -e ;\
-	docker-compose up --build -d ;\
 	test_status_code=0 ;\
-	docker-compose run tests go test github.com/usmartpro/banner-rotation/cmd/tests || test_status_code=$$? ;\
+	docker-compose run tests go test github.com/usmartpro/banner-rotation/cmd/tests/integration || test_status_code=$$? ;\
 	docker-compose down ;\
 	exit $$test_status_code ;
 

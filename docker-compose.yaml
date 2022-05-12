@@ -1,29 +1,17 @@
 version: "3.4"
+
+networks:
+  localnet:
+    driver: bridge
+
 services:
-  banner:
-    container_name: usmartpro-app
-    build:
-      context: .
-      dockerfile: ./build/app/Dockerfile
-    depends_on:
-      - postgres
-      - rabbit
-    ports:
-      - "8000:8000"
-    environment:
-      LOG_LEVEL: ${LOG_LEVEL}
-      LOG_FILENAME: ${LOG_FILENAME}
-      STORAGE_TYPE: ${STORAGE_TYPE}
-      STORAGE_DSN: ${STORAGE_DSN}
-      HTTP_HOST: ${HTTP_HOST}
-      HTTP_PORT: ${HTTP_PORT}
 
   postgres:
     image: postgres:14.2
     container_name: usmartpro-pg
     restart: always
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -32,21 +20,21 @@ services:
       - ../../postgres/data:/var/lib/postgresql/data
       - ../migrations/initdb:/docker-entrypoint-initdb.d
     networks:
-      localnet:
-        aliases:
-          - ${APP_HOST}
+      - localnet
 
   rabbit:
     image: rabbitmq:3.9.11-management
     container_name: usmartpro-banner-rabbit
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - localnet
 
   migrations:
     container_name: usmartpro-migrations
     build:
-      context: ..
+      context: .
       dockerfile: ./build/migrations/Dockerfile
     depends_on:
       - postgres
@@ -55,6 +43,38 @@ services:
       GOOSE_DBSTRING: "postgresql://postgres:postgres@postgres:5432/banners?sslmode=disable"
     command: [ "/bin/sh", "-c", "net-wait-go -addrs postgres:5432 && sleep 5 && /bin/goose up" ]
 
-networks:
-  localnet:
-    driver: bridge
+  banner:
+    container_name: usmartpro-app
+    build:
+      context: .
+      dockerfile: ./build/app/Dockerfile
+    restart: always
+    depends_on:
+      - postgres
+      - rabbit
+    ports:
+      - 8000:8000
+    environment:
+            LOG_LEVEL: ${LOG_LEVEL}
+            LOG_FILENAME: ${LOG_FILENAME}
+            STORAGE_TYPE: ${STORAGE_TYPE}
+            STORAGE_DSN: ${STORAGE_DSN}
+            HTTP_HOST: ${HTTP_HOST}
+            HTTP_PORT: ${HTTP_PORT}
+            RABBIT_DSN: ${RABBIT_DSN}
+            RABBIT_EXCHANGE: ${RABBIT_EXCHANGE}
+            RABBIT_QUEUE: ${RABBIT_QUEUE}
+    networks:
+      - localnet
+
+  tests:
+    container_name: usmartpro-tests
+    build:
+      context: .
+      dockerfile: ./build/tests/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ../logs/tests:/var/logs
+    networks:
+      - localnet

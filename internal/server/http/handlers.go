@@ -17,18 +17,16 @@ func NewServerHandlers(a *app.App) *ServerHandlers {
 
 func (s *ServerHandlers) AddBannerToSlot(w http.ResponseWriter, r *http.Request) {
 	var bS BannerSlot
-	var err error
-	if err = json.NewDecoder(r.Body).Decode(&bS); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&bS); err != nil {
 		ResponseError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	if err = s.app.AddBannerToSlot(bS.BannerID, bS.SlotID); err != nil {
+	if err := s.app.AddBannerToSlot(bS.BannerID, bS.SlotID); err != nil {
 		ResponseError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -85,7 +83,12 @@ func (s *ServerHandlers) GetBanner(w http.ResponseWriter, r *http.Request) {
 
 	result := BannerResponse{BannerID: idBanner}
 
-	responseData, _ := json.Marshal(result)
+	responseData, err := json.Marshal(result)
+	if err != nil {
+		ResponseError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseData)
