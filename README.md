@@ -1,8 +1,7 @@
 # banner-rotation
 Ротация баннеров. Проектная работа
 
-[![Go Report Card](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/usmartpro/banner-rotation)](https://goreportcard.com/report/github.com/usmartpro/banner-rotation)
 # ТЗ проекта:
 
 https://github.com/OtusGolang/final_project/blob/master/02-banners-rotation.md
